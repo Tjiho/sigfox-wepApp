@@ -1,3 +1,10 @@
+@font-face 
+{
+    font-family: arimo;
+    src: url("/static/fonts/arimo/Arimo-Regular.ttf");
+}
+
+
 html
 {
     width: 100%;
@@ -21,15 +28,38 @@ main
     display: flex;
     width: 100%;
     flex: 1;
+    z-index: 1;
     
 }
 
+/************** header ******************/
+
 header
 {
-    background-color: black;
-    color:white;
-    padding: 5px;
+    background-color: white;
+    color:cornflowerblue;
+    padding: 15px;
+    font-family: arimo,sans;
+    display: flex;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    z-index: 10;
 }
+
+header a
+{
+    color:cornflowerblue;
+    text-decoration: none;
+}
+
+h1
+{
+    margin: 0;
+    flex: 1;
+    font-size: 1.5em;
+    letter-spacing: 2.1px;
+}
+
+/***************** footer ************************/
 
 footer
 {
@@ -38,20 +68,59 @@ footer
     padding: 5px;
 }
 
+
+/****************** content *********************/
 #content
 {
     flex:1;
 }
 
+/***************** logs ************************/
+
 #logs
 {
     width: 400px;
-    border-left: 1px solid black;
+    border-left: 1px solid rgb(150,150,150);
+    background-color: rgb(240,240,240);
+    font-family: arimo,sans;
+    overflow-y: scroll;
+    max-height: 100%;
 }
 
 #logs h2
 {
     text-align: center;
-    margin: 5px;
+    margin: 15px;
     padding:0;
+}
+
+
+#logs ul
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#logs li
+{
+    border-bottom: 1px solid rgb(200,200,200);
+    padding: 10px;
+    background-color: rgb(240,250,240);
+}
+
+#logs li:nth-child(1)
+{
+    border-top: 1px solid rgb(200,200,200);
+}
+
+#logs h3
+{
+    margin: 0;
+    padding: 5px;
+}
+
+#logs li:nth-child(2n+0)
+{
+    background-color: rgb(250,240,240);
 }

@@ -21,8 +21,7 @@ Nunjucks.configure('views', {
 
 io.on('connection', function(socket)
 {
-    console.log('a user connected');
-    io.emit('chat message', "a user connected");
+    io.emit('logs', "New user is connected");
     socket.on('disconnect', function()
     {
         console.log('user disconnected');
@@ -34,18 +33,17 @@ io.on('connection', function(socket)
 app.post('/sigfox',function(req,res)
 {   
     var message = ""
-    console.log(req.body)
     if(req.body)
     {
         for( key in req.body)
         {
-            message += "<br/>["+key+"] => "+  req.body[key];  
+            message += "<div>["+key+"] => "+  req.body[key] +"</div>";  
         }
-        io.emit('chat message', "sigfox:"+message);
+        io.emit('logs', "<h3>sigfox:</h3>"+message);
     }
     else
     {
-        io.emit('chat message', "sigfox: no data");
+        io.emit('logs', "sigfox: no data");
     }
     res.sendStatus(200);  
 })
