@@ -35,19 +35,26 @@ function ajaxRoom(map)
 
 function createMap()
 {
-    var map = L.map('content').setView([55.3673174, 10.4305942], 20);
+    var map = L.map('content',
+    {
+        maxZoom: 25,
+        rotationAngle: 45
+    }).setView([55.3673174, 10.4308242], 19);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    L.marker([55.3673174, 10.4310942]).addTo(map)
-        .bindPopup('<a href="https://qwant.com"/>qwant.com</a>')
-        .openPopup();
-
     return map
 }
 
-
 map = createMap()
+
+var list_markers = new L.LayerGroup().addTo(map);
+
+L.marker([55.3673174, 10.4309942]).addTo(list_markers).bindPopup('<h3>Fipy</h3><p>Some informations...</p><a href="/">More information</a>')
+                    .openPopup();
+
+//markers.clearLayers();
+
 ajaxRoom(map)
