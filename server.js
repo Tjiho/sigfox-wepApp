@@ -28,18 +28,39 @@ io.on('connection', function(socket)
     });
 });
 
+app.post("/lora",function(req,res)
+{
+	if(req.body)
+	{
+		let payload = req.body.payload_raw 
+		let buff = new Buffer(payload, 'base64');
+		let payload_txt = buff.toString('ascii');
+		let res_object = JSON.parse(payload_txt);
+		res_object["hardware id"] = req.body["hardware_serial"]
+		let message = ""	
+		for( key in res_object)
+		{
+		    message += "<div>["+key+"] => "+  res_object[key] +"</div>";  
+		}
+		io.emit('logs', "<h3>Lora:</h3>"+message);
+	}	
 
+})
 
-app.post('/sigfox',function(req,res)
+app.post('/http',function(req,res)
 {   
     var message = ""
+    console.log(req.headers)
+    console.log(req.body)
+    //console0log("----");
     if(req.body)
     {
-        for( key in req.body)
+        //console.log(req.headers)
+	for( key in req.body)
         {
             message += "<div>["+key+"] => "+  req.body[key] +"</div>";  
         }
-        io.emit('logs', "<h3>sigfox:</h3>"+message);
+        io.emit('logs', "<h3>HTTP:</h3>"+message);
     }
     else
     {
@@ -55,7 +76,7 @@ app.get('/', function (req, res)
 })
 
 app.use('/static',Express.static('static'))
-
+app.use('/.well-known',Express.static('.well-known'))
 http.listen(Config.port, function () 
 {
     console.log('listening on port ' + Config.port)
