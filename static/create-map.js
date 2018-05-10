@@ -1,10 +1,42 @@
-function drawRoom(data,map)
+const greenStyle = {
+    "color": "#68BA4C",
+    "weight": 1 ,
+    "opacity": 0.95
+};
+
+const redStyle = {
+    "color": "#ff0000",
+    "weight": 1 ,
+    "opacity": 0.85
+};
+
+
+const greyStyle = {
+    "color": "#222222",
+    "weight": 1 ,
+    "opacity": 0.65
+};
+
+var map = createMap()
+var data = ""
+var list_markers = {}
+
+function colorRoom(room_name,style)
 {
-    var myStyle = {
-        "color": "#000000",
-        "weight": 1 ,
-        "opacity": 0.65
-    };
+    L.geoJSON(
+        data.features,
+        {
+            filter: function(feature, layer) {
+                return feature.properties.RoomId == room_name;
+            },
+            style: style
+        }
+    ).addTo(map); 
+}
+
+
+function drawRooms()
+{
 
     L.geoJSON(
         data.features,
@@ -12,12 +44,14 @@ function drawRoom(data,map)
             filter: function(feature, layer) {
                 return feature.properties.ZLevel == "0";
             },
-            style: myStyle
+            style: greenStyle
         }
     ).addTo(map);
+
+    colorRoom("Ø20-606-0",redStyle,data,map);
 }
 
-function ajaxRoom(map)
+function ajaxRoom()
 {
     var xhr = xhr = new XMLHttpRequest();
 
@@ -25,7 +59,8 @@ function ajaxRoom(map)
     {
         if (xhr.readyState === 4)
         {
-            drawRoom(JSON.parse(xhr.responseText),map)
+            data = JSON.parse(xhr.responseText),map
+            drawRooms()            
         }
     }
     xhr.open('GET', '/static/ou44_geometry.geojson', true)
@@ -48,13 +83,16 @@ function createMap()
     return map
 }
 
-map = createMap()
 
-var list_markers = new L.LayerGroup().addTo(map);
 
-L.marker([55.3673174, 10.4309942]).addTo(list_markers).bindPopup('<h3>Fipy</h3><p>Some informations...</p><a href="/">More information</a>')
-                    .openPopup();
+//var list_markers = new L.LayerGroup().addTo(map);
 
-//markers.clearLayers();
+//var a = L.marker([55.3673174, 10.4309942]);
+
+//map.addLayer(a)
+
+//a.bindPopup('<h3>Fipy</h3><p>Some informations...</p><a href="/">More information</a>').openPopup();
+
+//a.clearLayers();
 
 ajaxRoom(map)

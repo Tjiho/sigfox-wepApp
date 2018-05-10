@@ -36,12 +36,13 @@ app.post("/lora",function(req,res)
 		let buff = new Buffer(payload, 'base64');
 		let payload_txt = buff.toString('ascii');
 		let res_object = JSON.parse(payload_txt);
-		res_object["hardware id"] = req.body["hardware_serial"]
+		res_object["id"] = req.body["hardware_serial"]
 		let message = ""	
 		for( key in res_object)
 		{
 		    message += "<div>["+key+"] => "+  res_object[key] +"</div>";  
-		}
+        }
+        
 		io.emit('logs', "<h3>Lora:</h3>"+message);
 	}	
 
@@ -56,11 +57,12 @@ app.post('/http',function(req,res)
     if(req.body)
     {
         //console.log(req.headers)
-	for( key in req.body)
+	    for( key in req.body)
         {
             message += "<div>["+key+"] => "+  req.body[key] +"</div>";  
         }
         io.emit('logs', "<h3>HTTP:</h3>"+message);
+        useArgs(req.body)
     }
     else
     {
@@ -68,6 +70,15 @@ app.post('/http',function(req,res)
     }
     res.sendStatus(200);  
 })
+
+
+function useArgs(args)
+{
+    if(args['x'] && args["y"] && args['temperature'] && args['id'])
+    {
+        io.emit("info",args)
+    }
+}
 
 
 app.get('/', function (req, res) 
