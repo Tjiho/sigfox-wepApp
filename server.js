@@ -74,7 +74,7 @@ app.post('/http',function(req,res)
 
 function useArgs(args)
 {
-    if(args['x'] && args["y"] && args['temperature'] && args['id'])
+    if(args['room'] && args['temperature'] && args['id'])
     {
         io.emit("info",args)
     }

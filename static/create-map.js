@@ -1,13 +1,13 @@
 const greenStyle = {
     "color": "#68BA4C",
     "weight": 1 ,
-    "opacity": 0.95
+    "opacity": 1
 };
 
 const redStyle = {
     "color": "#ff0000",
     "weight": 1 ,
-    "opacity": 0.85
+    "opacity": 1
 };
 
 
@@ -20,18 +20,21 @@ const greyStyle = {
 var map = createMap()
 var data = ""
 var list_markers = {}
+var list_rooms = {}
 
 function colorRoom(room_name,style)
 {
-    L.geoJSON(
+    var room = L.geoJSON(
         data.features,
         {
             filter: function(feature, layer) {
                 return feature.properties.RoomId == room_name;
             },
-            style: style
+            style: style,
+            
         }
-    ).addTo(map); 
+    )
+    room.addTo(map); 
 }
 
 
@@ -44,11 +47,18 @@ function drawRooms()
             filter: function(feature, layer) {
                 return feature.properties.ZLevel == "0";
             },
-            style: greenStyle
+            style: greenStyle,
+            onEachFeature: function (feature, layer) {
+                //console.log(feature.getBounds().getCenter())
+                list_rooms[feature.properties.RoomId] = layer
+                //console.log(layer.getCenter())
+            }
         }
     ).addTo(map);
 
-    colorRoom("Ø20-606-0",redStyle,data,map);
+    //console.log(list_layers[0].getCenter())
+
+    //colorRoom("Ø20-606-0",redStyle);
 }
 
 function ajaxRoom()
