@@ -33,18 +33,18 @@ socket.on('info', function(msg)
     
     content_popup = `
     <div></div>
-    <div>Temperature (°c):'+${ msg["temperature"] }</div>
+    <div>Temperature (°c):'+${ msg["temp"] }</div>
     <div>People inside: ${msg["peoplePresent"] ? "Yes" : "No"} </div>
     <div><a href="">Show more</a></div>
     `
     list_markers[msg["id"]].bindPopup(content_popup,{autoClose:false}).openPopup();
 
-    if(msg["temperature"] > 50)
+    if(msg["temp"] > 50)
     {
         colorRoom(msg["room"],redStyle);
     }
 
-    if(msg["temperature"] < 50)
+    if(msg["temp"] < 50)
     {
         colorRoom(msg["room"],greenStyle);
     }

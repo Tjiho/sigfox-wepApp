@@ -41,8 +41,8 @@ app.post("/lora",function(req,res)
 		for( key in res_object)
 		{
 		    message += "<div>["+key+"] => "+  res_object[key] +"</div>";  
-        }
-        
+        	}
+        	useArgs(res_object)
 		io.emit('logs', "<h3>Lora:</h3>"+message);
 	}	
 
@@ -74,7 +74,7 @@ app.post('/http',function(req,res)
 
 function useArgs(args)
 {
-    if(args['room'] && args['temperature'] && args['id'] && args["peoplePresent"])
+    if(args['room'] && args['temp'] && args['id'] && args["peoplePresent"])
     {
         io.emit("info",args)
     }
