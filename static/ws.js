@@ -9,7 +9,7 @@ socket.on('logs', function(msg){
 socket.on('info', function(msg)
 {
     console.log(msg)
-    
+    msg["room"] = "Ø" + msg["room"];
     if(sessionStorage.getItem(msg["id"]))
     {
         if(sessionStorage.getItem(msg["id"])["room"] != msg["room"])
@@ -19,28 +19,25 @@ socket.on('info', function(msg)
             } catch (error) {
                 console.log("marker does not exist")
             }
+        }
+    }
+   
+    try {
+        list_markers[msg["id"]] = L.marker(list_rooms[msg["room"]].getCenter())
+        map.addLayer(list_markers[msg["id"]])
+    } catch (error) {
+        console.log("room does not exist:"+error)
+    }
 
-            try {
-                list_markers[msg["id"]] = L.marker(list_rooms[msg["room"]].getCenter())
-                map.addLayer(list_markers[msg["id"]])
-            } catch (error) {
-                console.log("room does not exist")
-            }
-            
-           
-        }
-    }
-    else
-    {
-        try {
-            list_markers[msg["id"]] = L.marker(list_rooms[msg["room"]].getCenter())
-            map.addLayer(list_markers[msg["id"]])
-        } catch (error) {
-            console.log("room does not exist")
-        }
-    }
     sessionStorage.setItem(msg["id"], msg);
-    list_markers[msg["id"]].bindPopup('Temperature (°c):'+msg["temperature"],{autoClose:false}).openPopup();
+    
+    content_popup = `
+    <div></div>
+    <div>Temperature (°c):'+${ msg["temperature"] }</div>
+    <div>People inside: ${msg["peoplePresent"] ? "Yes" : "No"} </div>
+    <div><a href="">Show more</a></div>
+    `
+    list_markers[msg["id"]].bindPopup(content_popup,{autoClose:false}).openPopup();
 
     if(msg["temperature"] > 50)
     {

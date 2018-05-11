@@ -1,5 +1,5 @@
 const greenStyle = {
-    "color": "#68BA4C",
+    "color": "#00ff00",
     "weight": 1 ,
     "opacity": 1
 };
@@ -12,18 +12,35 @@ const redStyle = {
 
 
 const greyStyle = {
-    "color": "#222222",
+    "color": "#aaaaaa",
     "weight": 1 ,
-    "opacity": 0.65
+    "opacity": 0.6
 };
+
+const blackStyle = {
+    "color": "#555555",
+    "weight": 1 ,
+    "opacity": 1
+}
 
 var map = createMap()
 var data = ""
 var list_markers = {}
 var list_rooms = {}
+var color_rooms = {}
+var reset_rooms = {}
 
 function colorRoom(room_name,style)
 {
+    if(color_rooms[room_name])
+    {
+        try {
+            map.removeLayer(color_rooms[room_name])    
+        } catch (error) {
+            console.log("Cannot delete old room")
+        }
+        
+    }
     var room = L.geoJSON(
         data.features,
         {
@@ -35,6 +52,15 @@ function colorRoom(room_name,style)
         }
     )
     room.addTo(map); 
+    color_rooms[room_name] = room;
+
+    if(style != blackStyle)
+    {
+        if(reset_rooms[room_name])
+            clearTimeout(reset_rooms[room_name])
+        reset_rooms[room_name] = setTimeout(() => colorRoom(room_name,blackStyle), 10000)
+    }
+
 }
 
 
@@ -47,7 +73,7 @@ function drawRooms()
             filter: function(feature, layer) {
                 return feature.properties.ZLevel == "0";
             },
-            style: greenStyle,
+            style: greyStyle,
             onEachFeature: function (feature, layer) {
                 //console.log(feature.getBounds().getCenter())
                 list_rooms[feature.properties.RoomId] = layer
