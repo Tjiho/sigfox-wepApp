@@ -11,8 +11,22 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 
 var Config = require('./config');
+const fs = require('fs');
+var beacons_obj = JSON.parse(fs.readFileSync('beacons.json', 'utf8'));
 
 
+
+function getRoom(major,minor)
+{
+	bs = beacons_obj.beacons
+	for(let i=0;i<bs.length;i++)
+	{
+		if(bs[i].major == major && bs[i].minor == minor)
+			return bs[i].room
+	} 
+}
+
+//console.log(getRoom("64188","8924"))
 
 Nunjucks.configure('views', {
     autoescape: true,
@@ -74,9 +88,12 @@ app.post('/http',function(req,res)
 
 function useArgs(args)
 {
-    if(args['room'] && args['temp'] && args['id'] && args["peoplePresent"])
+    if(args['majorid'] && args['minorid'] && args['temp'] && args['id'] && args["peoplePresent"])
     {
-        io.emit("info",args)
+        console.log("plop");
+	args['room'] = getRoom(args['majorid'],args['minorid']) 
+	console.log(args)
+	io.emit("info",args)
     }
 }
 

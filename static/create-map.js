@@ -71,7 +71,7 @@ function drawRooms()
         data.features,
         {
             filter: function(feature, layer) {
-                return feature.properties.ZLevel == "0";
+                return feature.properties.ZLevel == "2";
             },
             style: greyStyle,
             onEachFeature: function (feature, layer) {
